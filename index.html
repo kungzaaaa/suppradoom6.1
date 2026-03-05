@@ -1,0 +1,1707 @@
+﻿<!doctype html>
+<html lang="th">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>หมู่บ้านซับประดู่</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&family=Noto+Sans+Thai:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+  <link rel="icon" type="image/x-icon" sizes="16x16" href="logo/logotitle.png" />
+  <style>
+    /* ========================================= */
+    /* [แก้ไขใหม่] แอนิเมชันปุ่มสลับโหมด สไตล์นุ่มนวลเป็นธรรมชาติ (แก้ไขความสมูท 100%) */
+    /* ========================================= */
+
+    /* 1. ให้กรอบปุ่มสมูททุกการกระทำ (เพิ่ม transform เข้าไปให้เวลาชี้แล้วเด้งนุ่มๆ) */
+    .theme-toggle-btn {
+      transition: background-color 0.4s ease, color 0.4s ease, border 0.4s ease, box-shadow 0.4s ease, transform 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    }
+
+    /* 2. เอฟเฟกต์เวลาเอาเมาส์ชี้ (Hover) ให้ปุ่มลอยขึ้นเบาๆ พร้อมเพิ่มเงา */
+    .theme-toggle-btn:hover {
+      transform: translateY(-3px) !important;
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2) !important;
+    }
+
+    /* 3. เอฟเฟกต์เวลากดคลิก (Active) ให้ปุ่มยุบตัวลงนุ่มๆ */
+    .theme-toggle-btn:active {
+      transform: scale(0.92) !important;
+      transition: transform 0.1s ease !important;
+      /* ตอนยุบให้ยุบเร็วๆ จะได้ติดนิ้ว */
+    }
+
+    /* 4. ตั้งค่าความสมูทของไอคอนพระจันทร์/พระอาทิตย์ */
+    .theme-toggle-btn i {
+      transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease !important;
+    }
+
+    /* จังหวะโหมดมืด (พระอาทิตย์) */
+    body.dark-mode .theme-toggle-btn i {
+      transform: rotate(30deg) scale(1.1) !important;
+      opacity: 1 !important;
+    }
+
+    /* จังหวะโหมดสว่าง (พระจันทร์) */
+    body:not(.dark-mode) .theme-toggle-btn i {
+      transform: rotate(0deg) scale(1) !important;
+      opacity: 0.9 !important;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Sarabun', 'Noto Sans Thai';
+      background-color: #ffffff;
+    }
+
+    /* ===== HEADER & MENU ===== */
+    .fixed-header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 1000;
+      background: #ffffff;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      padding-bottom: 5px;
+    }
+
+    .topbar {
+      background: transparent;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #4d3328;
+      padding: 8px 0;
+      position: relative;
+    }
+
+    .hamburger-menu {
+      display: none;
+      flex-direction: column;
+      /* เรียงเส้นจากบนลงล่าง */
+      gap: 6px;
+      /* ระยะห่างระหว่างเส้น */
+      cursor: pointer;
+      position: absolute;
+      right: 25px;
+      /* ให้อยู่ชิดขวาเสมอ */
+      z-index: 1001;
+    }
+
+    .hamburger-menu .line {
+      width: 30px;
+      height: 3px;
+      background-color: #4d3328;
+      border-radius: 5px;
+      transition: all 0.3s ease-in-out;
+    }
+
+    /* แอนิเมชันเปลี่ยนเป็นกากบาท */
+    .hamburger-menu.open .line:nth-child(1) {
+      transform: translateY(9px) rotate(45deg);
+    }
+
+    .hamburger-menu.open .line:nth-child(2) {
+      opacity: 0;
+    }
+
+    .hamburger-menu.open .line:nth-child(3) {
+      transform: translateY(-9px) rotate(-45deg);
+    }
+
+    .logo {
+      font-size: 22px;
+      font-weight: 800;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 6px;
+      text-align: center;
+      flex-wrap: wrap;
+    }
+
+    .logo img {
+      height: 70px;
+      width: auto;
+      object-fit: contain;
+      transition: height 0.3s;
+    }
+
+    /* ลอกเลียนแบบโลโก้จาก New folder */
+    .site-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .site-brand .logo-icon {
+      width: 44px;
+      height: 44px;
+      background: #f0f4f8;
+      /* เทียบเท่า var(--surface) ของต้นฉบับ */
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .site-brand .logo-icon img {
+      width: 24px;
+      height: 24px;
+      flex-shrink: 0;
+      object-fit: contain;
+    }
+
+    .brand-sub {
+      font-size: 0.75rem;
+      font-weight: 400;
+      opacity: 0.75;
+      color: var(--text-light);
+      /* เสริมสีให้ชัดขึ้น */
+    }
+
+    /* ===== MENU BAR (UX/UI Upgrade) ===== */
+    .menu-bar {
+      background: var(--accent);
+      display: flex;
+      justify-content: center;
+      gap: 5px;
+      padding: 12px 40px;
+      width: fit-content;
+      border-radius: 50px;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+    }
+
+    .menu-bar a {
+      text-decoration: none;
+      color: rgba(255, 255, 255, 0.85);
+      /* ดรอปสีขาวลงนิดนึง เพื่อให้มีมิติเวลาเอาเมาส์ชี้ */
+      font-size: 15px;
+      font-weight: 500;
+      padding: 8px 20px;
+      /* [สำคัญ] เพิ่มพื้นที่รอบตัวอักษรให้กดง่ายขึ้น (Fitts's Law) */
+      border-radius: 30px;
+      /* ทำขอบให้มนกลมเป็นรูปแคปซูล */
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      /* ระยะห่างระหว่างไอคอนกับตัวหนังสือ */
+      transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+      /* ทำให้แอนิเมชันเด้งแบบนุ่มนวล */
+    }
+
+    /* ลูกเล่นเวลาเอาเมาส์ชี้ (Hover Effect) */
+    .menu-bar a:hover {
+      color: #ffffff;
+      /* ตัวหนังสือสว่างวาบขึ้น */
+      background-color: rgba(255, 255, 255, 0.15);
+      /* มีพื้นหลังกระจกใสๆ โผล่มา */
+      transform: translateY(-3px);
+      /* สั่งให้ปุ่มกระโดดลอยขึ้นเบาๆ */
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      /* เพิ่มเงาให้ปุ่มที่ลอยขึ้น */
+    }
+
+    /* ===== BANNER ===== */
+    .banner-wrapper {
+      width: 100%;
+      line-height: 0;
+    }
+
+    .responsive-banner {
+      width: 100%;
+      /* กว้างเต็มจอเหมือนเดิม */
+      height: 500px;
+      /* [แก้ไข] กำหนดความสูงที่ต้องการ (แนะนำ 350px - 450px) */
+      object-fit: cover;
+      /* [สำคัญ] สั่งให้ตัดส่วนเกินของภาพออกเพื่อไม่ให้รูปบีบหรือยืดจนเบี้ยว */
+      object-position: center;
+      /* จัดตำแหน่งภาพให้อยู่กึ่งกลางเสมอ */
+      /* [สำคัญ] สั่งให้ความสูงปรับอัตโนมัติตามสัดส่วนรูปเดิม (รูปจะไม่โดนตัด) */
+      display: block;
+      /* แสดงผลเป็นบล็อก */
+    }
+
+    /* ===== PROJECT SECTION ===== */
+    .project-section {
+      display: flex;
+      justify-content: space-between;
+      padding: 60px 50px;
+      gap: 40px;
+      flex-wrap: wrap;
+    }
+
+    .project-info {
+      width: 28%;
+      min-width: 250px;
+    }
+
+    .project-info h2 {
+      font-size: 32px;
+      font-weight: 600;
+      color: #1c1918;
+      margin-bottom: 18px;
+    }
+
+    .project-info .line {
+      width: 80px;
+      height: 2px;
+      background: var(--accent);
+      margin-bottom: 18px;
+    }
+
+    .project-info p {
+      font-size: 15px;
+      color: #444;
+      margin-bottom: 30px;
+    }
+
+    .view-btn {
+      display: inline-block;
+      padding: 10px 30px;
+      border: 1px solid var(--primary);
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      background: transparent;
+    }
+
+    .view-btn:hover {
+      background-color: var(--primary);
+      color: white;
+    }
+
+    /* ===== SLIDER ===== */
+    .project-slider {
+      width: 70%;
+      display: flex;
+      gap: 26px;
+      overflow-x: auto;
+      scroll-behavior: smooth;
+      padding-bottom: 15px;
+      flex: 1;
+    }
+
+    .project-slider::-webkit-scrollbar {
+      height: 8px;
+    }
+
+    .project-slider::-webkit-scrollbar-thumb {
+      background: #ccc;
+      border-radius: 10px;
+    }
+
+    .project-card {
+      min-width: 280px;
+      border-radius: 6px;
+      overflow: hidden;
+      position: relative;
+      cursor: pointer;
+    }
+
+    .project-card img {
+      width: 100%;
+      height: 350px;
+      object-fit: cover;
+      border-radius: 6px;
+    }
+
+    .card-title {
+      position: absolute;
+      bottom: 12px;
+      left: 12px;
+      color: white;
+      font-size: 17px;
+      text-shadow: 0px 2px 6px rgba(0, 0, 0, 0.7);
+    }
+
+    .bottom-line {
+      width: 90%;
+      height: 2px;
+      background: #4d3328;
+      margin: 40px auto 0;
+    }
+
+    /* --- About Us Section Styles --- */
+    .about-section {
+      background-color: #ffffff;
+      padding: 60px 20px;
+      color: #333;
+    }
+
+    .about-wrapper {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .about-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 50px;
+      margin-bottom: 60px;
+    }
+
+    .about-text {
+      flex: 1;
+      text-align: left;
+    }
+
+    .about-text h2 {
+      font-size: 2em;
+      font-weight: bold;
+      color: #444;
+      margin-bottom: 20px;
+    }
+
+    .about-desc {
+      color: #777;
+      line-height: 1.6;
+      margin-bottom: 30px;
+      font-size: 0.95em;
+    }
+
+    .about-btn {
+      display: inline-block;
+      padding: 10px 30px;
+      border: 1px solid #4d3328;
+      color: #4d3328;
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      background: transparent;
+    }
+
+    .about-btn:hover {
+      background-color: #4d3328;
+      color: white;
+    }
+
+    .about-image {
+      flex: 1;
+    }
+
+    /* Stats */
+    .stats-row {
+      display: flex;
+      justify-content: space-around;
+      text-align: center;
+      padding-top: 30px;
+      /* ลดระยะขอบด้านบนลง (จากเดิม 40px) */
+      border-top: 1px solid #000000;
+    }
+
+    .stat-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .stat-item i {
+      font-size: 2.2em;
+      /* ลดขนาดไอคอนลง (จากเดิม 3em) */
+      color: #000000;
+      margin-bottom: 10px;
+      /* ลดช่องว่างระหว่างไอคอนกับตัวเลข */
+    }
+
+    .stat-number {
+      font-size: 2.2em;
+      /* ลดขนาดตัวเลขลง (จากเดิม 3em) */
+      font-weight: bold;
+      color: #333;
+      line-height: 1;
+    }
+
+    .stat-label {
+      font-size: 0.8em;
+      color: #999;
+      letter-spacing: 1px;
+      margin-top: 5px;
+      /* ลดช่องว่างระหว่างตัวเลขกับข้อความด้านล่าง */
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+
+    /* --- Footer Styles --- */
+    .site-footer {
+      max-width: 1100px;
+      margin: 40px auto 0;
+      padding-top: 20px;
+      text-align: center;
+      font-size: 14px;
+      color: #777777;
+      border-top: 1px solid #eaeaea;
+    }
+
+    /* ========================================= */
+    /* <--- [แก้ไข] ส่วน Responsive (มือถือ/แท็บเล็ต) */
+    /* ========================================= */
+
+    /* สำหรับหน้าจอ Tablet และ Mobile (กว้างไม่เกิน 992px) */
+    @media (max-width: 992px) {
+      .project-section {
+        flex-direction: column;
+        padding: 40px 20px;
+      }
+
+      .project-info {
+        width: 100%;
+        margin-bottom: 30px;
+        text-align: center;
+        /* จัดกลางให้อ่านง่าย */
+      }
+
+      .project-info .line {
+        margin: 0 auto 18px auto;
+        /* จัดเส้นขีดให้กลาง */
+      }
+
+      .project-slider {
+        width: 100%;
+        /* ให้ Slider เต็มจอ */
+      }
+
+      .about-content {
+        flex-direction: column;
+        gap: 30px;
+      }
+
+      .about-text {
+        text-align: center;
+      }
+
+      @media (max-width: 600px) {
+        .responsive-banner {
+          height: auto;
+          /* ในมือถือให้ความสูงปรับตามธรรมชาติ รูปจะได้เห็นครบ */
+        }
+      }
+
+      /* ระบบเมนูมือถือ Slide Down นุ่มนวล + รวมปุ่มเปลี่ยนธีมไว้ด้านใน */
+      @media (max-width: 768px) {
+        .topbar {
+          justify-content: center !important;
+          min-height: 65px !important;
+        }
+
+        .logo {
+          padding: 0 !important;
+          margin: 0 auto !important;
+        }
+
+        .logo img {
+          height: 65px !important;
+        }
+
+        .hamburger-menu {
+          display: flex !important;
+          top: 50% !important;
+          transform: translateY(-50%) !important;
+          right: 20px !important;
+          margin: 0 !important;
+        }
+
+        /* 2. เปลี่ยนให้กล่องคลุม (.nav-wrapper) เป็นตัวสไลด์ลงมาแทน (จะได้รวมปุ่มโหมดมืดลงมาด้วย) */
+        .nav-wrapper {
+          position: absolute !important;
+          top: 100% !important;
+          left: 0 !important;
+          width: 100% !important;
+          flex-direction: column;
+          background: #ffaf36;
+          /* สีส้ม */
+          padding: 10px 0 25px 0 !important;
+          border-radius: 0 0 25px 25px;
+          box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+
+          /* แอนิเมชันความสมูท 100% ใช้ opacity + transform แทน max-height */
+          visibility: hidden;
+          opacity: 0;
+          transform: translateY(-20px);
+          transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1) !important;
+          z-index: 999;
+          gap: 0 !important;
+        }
+
+        /* เมื่อกดปุ่ม 3 ขีด กล่องจะสไลด์ลงมา */
+        .nav-wrapper.active {
+          visibility: visible;
+          opacity: 1;
+          transform: translateY(0);
+        }
+
+        /* 3. ล้างค่า .menu-bar ให้โปร่งใส กลมกลืนไปกับ Dropdown */
+        .menu-bar {
+          position: static !important;
+          background: transparent !important;
+          box-shadow: none !important;
+          flex-direction: column;
+          width: 90%;
+          padding: 0 !important;
+          border: none !important;
+        }
+
+        /* 4. จัดเรียงปุ่มลิงก์เมนู (มีลูกศร Hover สมูทๆ บนมือถือ) */
+        .menu-bar a {
+          margin: 0;
+          padding: 16px 30px;
+          /* ระยะขอบซ้ายเดิมคือ 30px */
+          border-radius: 0;
+          justify-content: flex-start;
+          background: transparent;
+          border: none;
+          border-bottom: 3px solid rgba(255, 255, 255, 0.2);
+          width: 100%;
+          box-sizing: border-box;
+          transition: all 0.3s ease;
+          /* เพิ่มความสมูทตอนเอานิ้วแตะ/ยกออก */
+        }
+
+        .menu-bar a:last-child {
+          border-bottom: none;
+        }
+
+        /* สร้างลูกศรเตรียมไว้ แต่ซ่อนและหดพื้นที่ให้เป็น 0 (กันข้อความกระตุก) */
+        .menu-bar a::before {
+          content: '\f0da';
+          /* ไอคอนลูกศรสามเหลี่ยม (Font Awesome) */
+          font-family: 'Font Awesome 6 Free';
+          font-weight: 900;
+          font-size: 14px;
+          display: inline-block !important;
+          /* เปิดใช้งานลูกศร */
+          opacity: 0;
+          /* โปร่งใส */
+          width: 0;
+          /* หดความกว้าง */
+          margin-right: 0;
+          transform: translateX(-15px);
+          /* ถอยไปซ่อนทางซ้าย */
+          transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        /* แอคชันเวลาเอานิ้วสัมผัส (Active) หรือเมาส์ชี้ (Hover) */
+        .menu-bar a:hover,
+        .menu-bar a:active {
+          background: rgba(255, 255, 255, 0.15);
+          padding-left: 24px;
+          /* ทริค! หดระยะขอบซ้ายลงนิดนึง เพื่อเปิดทางให้ลูกศร */
+        }
+
+        /* สั่งให้ลูกศรโผล่มา และห่างจากไอคอนคำ 3px ตามที่ต้องการ */
+        .menu-bar a:hover::before,
+        .menu-bar a:active::before {
+          opacity: 1;
+          width: 12px;
+          /* ขยายพื้นที่ให้ตัวลูกศร */
+          margin-right: 3px;
+          /* เว้นระยะห่างหน้าคำ 3px เป๊ะๆ */
+          transform: translateX(0);
+          /* สไลด์เข้าที่ */
+        }
+
+        /* 5. แปลงร่างปุ่มเปลี่ยนโหมด เป็นปุ่มกว้างๆ ต่อท้ายเมนู */
+        .theme-toggle-btn {
+          position: static !important;
+          transform: none !important;
+          width: 85% !important;
+          height: 50px !important;
+          margin: 15px auto 0 auto !important;
+          border-radius: 50px !important;
+          background-color: rgba(255, 255, 255, 0.25) !important;
+          color: #ffffff !important;
+          box-shadow: none !important;
+          justify-content: center !important;
+          gap: 12px;
+        }
+
+        /* ใส่ข้อความให้ปุ่มรู้ว่าใช้ทำอะไร */
+        .theme-toggle-btn::after {
+          content: "สลับโหมด (มืด/สว่าง)";
+          font-family: 'Sarabun', 'Noto Sans Thai';
+          font-size: 16px;
+          font-weight: 500;
+        }
+
+        .theme-toggle-btn:hover {
+          background-color: rgba(255, 255, 255, 0.4) !important;
+          transform: scale(0.96) !important;
+          /* ยุบตัวเวลากด */
+        }
+
+        /* จัดเรียงส่วนอื่นๆ ในหน้ามือถือ */
+        .about-content {
+          flex-direction: column;
+          gap: 30px;
+          text-align: center;
+        }
+
+        .about-text h2::after {
+          margin: 10px auto;
+        }
+
+        .stats-row {
+          flex-direction: column;
+          gap: 30px;
+          text-align: center;
+        }
+
+        .project-section {
+          padding: 40px 20px;
+        }
+
+        /* โหมดมืดสำหรับ Dropdown มือถือ */
+        body.dark-mode .nav-wrapper {
+          background-color: #000000 !important;
+          border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+        }
+
+        body.dark-mode .theme-toggle-btn {
+          background-color: rgba(255, 255, 255, 0.1) !important;
+          color: #ffaf36 !important;
+        }
+      }
+    }
+
+    /* ========================================= */
+    /* [ส่วนที่เพิ่มใหม่] CSS สำหรับ Footer แผนที่และช่องทางติดต่อ */
+    /* ========================================= */
+
+    /* กล่องคลุม Footer หลัก */
+    .main-footer {
+      background-color: #fcfaf8;
+      padding: 60px 20px 20px;
+      border-top: 1px solid #eaeaea;
+    }
+
+    /* กล่องจัดระเบียบเนื้อหาด้านในให้อยู่ตรงกลาง */
+    .footer-container {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+    }
+
+    /* หัวข้อใน Footer */
+    .footer-heading {
+      font-size: 18px;
+      color: #1a3a5c;
+      margin-top: 0;
+      margin-bottom: 15px;
+      font-weight: 600;
+    }
+
+    /* สไตล์สำหรับกล่องแผนที่ */
+    .footer-map iframe {
+      width: 100%;
+      height: 220px;
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    }
+
+    .contact-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .contact-list li {
+      font-size: 15px;
+      color: #555;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+    }
+
+    .contact-list i {
+      color: #ffaf36;
+      margin-top: 4px;
+      /* ดันไอคอนลงมานิดหน่อยให้ตรงกับบรรทัดแรกของข้อความ */
+    }
+
+    /* สไตล์สำหรับกลุ่มปุ่ม Social Media */
+    .social-icons {
+      display: flex;
+      gap: 15px;
+      /* ระยะห่างระหว่างปุ่ม */
+    }
+
+    /* สไตล์ปุ่ม Social แต่ละปุ่ม */
+    .social-btn {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 40px;
+      height: 40px;
+      background-color: #ffffff;
+      color: #4d3328;
+      border-radius: 50%;
+      text-decoration: none;
+      font-size: 18px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s ease;
+    }
+
+    .social-btn.facebook:hover {
+      background-color: #1877f2;
+      color: #ffffff;
+    }
+
+    .social-btn.line:hover {
+      background-color: #06c755;
+      color: #ffffff;
+    }
+
+    .social-btn.youtube:hover {
+      background-color: #ff0000;
+      color: #ffffff;
+    }
+
+    /* --- Responsive ปรับแต่งสำหรับหน้าจอมือถือ --- */
+    @media (max-width: 768px) {
+      .footer-container {
+        grid-template-columns: 1fr;
+        /* เมื่อจอมือถือ ให้หดเหลือ 1 คอลัมน์ (เรียงบนลงล่าง) */
+        gap: 30px;
+      }
+    }
+
+    /* --- 4. Image Gallery Styles --- */
+    html {
+      scroll-behavior: smooth;
+    }
+
+    /* ========================================= */
+    /* [เพิ่มใหม่] ปุ่ม Back to Top */
+    /* ========================================= */
+    .back-to-top {
+      position: fixed;
+      bottom: 30px;
+      /* ระยะห่างจากขอบล่างของหน้าจอ */
+      right: 30px;
+      /* ระยะห่างจากขอบขวาของหน้าจอ */
+      width: 50px;
+      /* ขนาดความกว้างของปุ่ม */
+      height: 50px;
+      /* ขนาดความสูงของปุ่ม */
+      background: var(--primary);
+      /* สีพื้นหลังของปุ่ม (ใช้สีน้ำเงินของธีมเว็บ) */
+      border-radius: 50%;
+      /* ทำให้ขอบปุ่มโค้งมน 100% จนเป็นวงกลม */
+      display: flex;
+      align-items: center;
+      /* จัดให้ไอคอนลูกศรอยู่กึ่งกลางแนวตั้ง */
+      justify-content: center;
+      /* จัดให้ไอคอนลูกศรอยู่กึ่งกลางแนวนอน */
+      color: #ffffff;
+      /* สีของไอคอนลูกศร (สีขาว) */
+      text-decoration: none;
+      /* เอาเส้นใต้ที่เกิดจากแท็กลิงก์ <a> ออก */
+      opacity: 0;
+      /* ซ่อนปุ่มไว้ก่อน (โปร่งใส 100%) เวลาอยู่บนสุดของเว็บ */
+      visibility: hidden;
+      /* ซ่อนจากการถูกกดด้วย */
+      transition: all 0.4s;
+      /* ทำให้เวลาปุ่มโชว์/ซ่อน หรือเอาเมาส์ชี้ มีความนุ่มนวล 0.4 วินาที */
+      z-index: 999;
+      /* ให้อยู่ด้านหน้าสุด จะได้ไม่โดนรูปอื่นบัง */
+      border: 2px solid transparent;
+      /* เตรียมขอบใสๆ ไว้สำหรับเอฟเฟกต์ตอนชี้เมาส์ */
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      /* เพิ่มเงาให้ปุ่มดูลอยขึ้นมา */
+    }
+
+    /* คลาสนี้จะถูกเพิ่มด้วย JavaScript เมื่อเลื่อนจอลงมา */
+    .back-to-top.show {
+      opacity: 1;
+      /* ปรับให้ปุ่มแสดงผล (ทึบแสง) */
+      visibility: visible;
+      /* เปิดให้กดปุ่มได้ */
+    }
+
+    /* เอฟเฟกต์เวลาเอาเมาส์ชี้ที่ปุ่ม (Hover) */
+    .back-to-top:hover {
+      background: #ffffff;
+      /* เปลี่ยนสีพื้นหลังเป็นสีขาว */
+      border-color: var(--primary);
+      /* เพิ่มเส้นขอบสีน้ำเงิน */
+      color: var(--primary);
+      /* เปลี่ยนสีไอคอนเป็นสีน้ำเงิน */
+      transform: translateY(-5px);
+      /* ทำให้ปุ่มเด้งลอยขึ้นไปด้านบนนิดนึง (5px) */
+    }
+
+    /* ========================================= */
+    /* 1. จัดระเบียบให้เมนูและปุ่มอยู่คู่กัน (ตรงกลาง) */
+    /* ========================================= */
+    .nav-wrapper {
+      display: flex;
+      justify-content: center;
+      /* ให้อยู่กึ่งกลางหน้าจอ */
+      align-items: center;
+      /* ให้อยู่ระดับเดียวกัน */
+      gap: 15px;
+      /* ระยะห่างระหว่างเมนู กับ ปุ่มพระจันทร์ */
+      width: 100%;
+      padding-bottom: 12px;
+    }
+
+    /* ตกแต่งปุ่มวงกลมพระจันทร์ */
+    .theme-toggle-btn {
+      width: 45px;
+      height: 45px;
+      border-radius: 50%;
+      /* ทำให้เป็นวงกลม */
+      border: none;
+      background-color: var(--accent);
+      /* สีทองเข้ากับเมนู */
+      color: #ffffff;
+      font-size: 18px;
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+      transition: all 0.3s ease;
+      flex-shrink: 0;
+    }
+
+    .theme-toggle-btn:hover {
+      transform: translateY(-3px);
+      /* ชี้แล้วเด้งขึ้นเบาๆ */
+    }
+
+    /* ========================================= */
+    /* 2. ระบบสีเมื่อเปิดโหมดมืด (Dark Mode) */
+    /* ========================================= */
+    body.dark-mode,
+    body.dark-mode .about-section {
+      background-color: #0a0f1a !important;
+      color: #d0dce8 !important;
+    }
+
+    body.dark-mode .fixed-header {
+      background-color: #070d18 !important;
+    }
+
+    /* เปลี่ยนสีตัวหนังสือต่างๆ ให้สว่างขึ้นในโหมดมืด */
+    body.dark-mode .topbar,
+    body.dark-mode .project-info h2,
+    body.dark-mode .project-info p,
+    body.dark-mode .about-text h2,
+    body.dark-mode .about-desc,
+    body.dark-mode .stat-number,
+    body.dark-mode .stat-label,
+    body.dark-mode .footer-heading,
+    body.dark-mode .contact-list li {
+      color: #d0dce8 !important;
+    }
+
+    body.dark-mode .main-footer {
+      background-color: #0f1c2e !important;
+      border-top: 1px solid #1e3a58 !important;
+    }
+
+    /* เมื่อเป็นโหมดมืด ให้ปุ่มกลายเป็นสีดำ รูปพระอาทิตย์สีเหลือง */
+    body.dark-mode .theme-toggle-btn {
+      background-color: #0f1c2e !important;
+      color: var(--accent) !important;
+      border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    }
+
+    /* ========================================= */
+    /* 3. ปรับสีปุ่ม (Buttons) เมื่อเปิดโหมดมืด */
+    /* ========================================= */
+
+    /* ปุ่ม "เพิ่มเติม" และ "ประวัติ" (เปลี่ยนเป็นกรอบสีทอง) */
+    body.dark-mode .view-btn,
+    body.dark-mode .about-btn {
+      border-color: var(--accent) !important;
+      color: var(--accent) !important;
+    }
+
+    /* เอฟเฟกต์เวลาเอาเมาส์ชี้ปุ่มในโหมดมืด */
+    body.dark-mode .view-btn:hover,
+    body.dark-mode .about-btn:hover {
+      background-color: var(--accent) !important;
+      color: #0a0f1a !important;
+      /* ตัวหนังสือสีเข้มเพื่อให้ตัดกับพื้นทอง */
+    }
+
+    /* ปุ่ม Social Media ด้านล่างสุด */
+    body.dark-mode .social-btn {
+      background-color: #162436 !important;
+      /* พื้นหลังปุ่มสีเทาเข้ม */
+      color: var(--accent) !important;
+      /* สีไอคอนทอง */
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5) !important;
+    }
+
+    /* ให้สีตอนชี้ (Hover) ของโซเชียลยังคงเอกลักษณ์เดิมไว้ */
+    body.dark-mode .social-btn.facebook:hover {
+      background-color: #1877f2 !important;
+      color: #ffffff !important;
+    }
+
+    body.dark-mode .social-btn.line:hover {
+      background-color: #06c755 !important;
+      color: #ffffff !important;
+    }
+
+    body.dark-mode .social-btn.youtube:hover {
+      background-color: #ff0000 !important;
+      color: #ffffff !important;
+    }
+
+    /* ========================================= */
+    /* [แก้ไขเพิ่ม] เปลี่ยนสีไอคอนเฉพาะจุดในโหมดมืด */
+    /* ========================================= */
+
+    /* เปลี่ยนสีไอคอน ปฏิทิน (วันที่), ดวงตา (ยอดวิว), และ หนังสือพิมพ์ (ข่าว) */
+    body.dark-mode .fa-calendar-check,
+    body.dark-mode .fa-eye,
+    body.dark-mode .fa-clock-rotate-left,
+    body.dark-mode .fa-headset,
+    body.dark-mode .fa-newspaper,
+    body.dark-mode .fa-users {
+      color: var(--accent) !important;
+      opacity: 0.9;
+    }
+
+    /* ========================================= */
+    /* [แก้ไขเพิ่ม] เปลี่ยนสี Menu Bar เป็นสีดำในโหมดมืด */
+    /* ========================================= */
+    body.dark-mode .menu-bar {
+      background-color: #162436 !important;
+      /* เปลี่ยนพื้นหลังเมนูเป็นสีดำ */
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5) !important;
+      /* ปรับเงาให้เข้มขึ้นสำหรับพื้นหลังสีดำ */
+    }
+
+    /* ========================================= */
+    /* [แก้ไขเพิ่ม] เปลี่ยนสีปุ่ม Back to Top ในโหมดมืด */
+    /* ========================================= */
+    body.dark-mode .back-to-top {
+      background-color: #162436 !important;
+      /* พื้นหลังสีเทาเข้ม */
+      color: var(--accent) !important;
+      /* ลูกศรสีทอง */
+      border: 1px solid var(--accent) !important;
+      /* ขอบสีทอง */
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5) !important;
+    }
+
+    /* เอฟเฟกต์เวลาเอาเมาส์ชี้ปุ่ม Back to Top ในโหมดมืด */
+    body.dark-mode .back-to-top:hover {
+      background-color: var(--accent) !important;
+      /* พื้นหลังเปลี่ยนเป็นสีทอง */
+      color: #0a0f1a !important;
+      /* ลูกศรเปลี่ยนเป็นสีดำ */
+    }
+
+    /* ========================================= */
+    /* [แก้ไขเพิ่ม] เปลี่ยนสีแถบ Copyright (Site Footer) ในโหมดมืด */
+    /* ========================================= */
+    body.dark-mode .site-footer {
+      color: #7a98b8 !important;
+      border-top: 1px solid #1e3a58 !important;
+    }
+
+    /* ========================================= */
+    /* สีของ Logo ในโหมดมืด */
+    /* ========================================= */
+    body.dark-mode .site-brand .logo-icon {
+      background: #0f1c2e;
+    }
+
+    body.dark-mode .site-brand,
+    body.dark-mode .brand-sub {
+      color: #d0dce8;
+    }
+
+    /* ========================================= */
+    /* [แก้ไขเพิ่ม] เปลี่ยนสี Hamburger Menu (ปุ่ม 3 ขีด) ในโหมดมืด */
+    /* ========================================= */
+    body.dark-mode .hamburger-menu .line {
+      background-color: var(--accent) !important;
+      /* เปลี่ยนเส้นเป็นสีทองให้เข้ากับธีม */
+    }
+
+    /* ---------- CSS Variables ---------- */
+    :root {
+      --primary: #1a3a5c;
+      --primary-mid: #1e4976;
+      --primary-light: #2a6099;
+      --accent: #c8a951;
+      --accent-hover: #e0be6a;
+      --bg: #f0f4f8;
+      --surface: #ffffff;
+      --surface2: #e8edf4;
+      --text: #1a2533;
+      --text-muted: #4a6080;
+      --border: #ccd8e8;
+      --header-bg: #1a3a5c;
+      --header-text: #ffffff;
+      --nav-hover: rgba(255, 255, 255, 0.15);
+      --card-shadow: 0 4px 20px rgba(26, 58, 92, 0.12);
+      --radius: 12px;
+      --radius-sm: 8px;
+      --transition: 0.3s ease;
+      --font: 'Sarabun', 'Noto Sans Thai', sans-serif;
+    }
+
+    body.dark-mode {
+      --primary: #0d1f33;
+      --primary-mid: #122840;
+      --primary-light: #1a3a5c;
+      --accent: #e0be6a;
+      --accent-hover: #f5d87a;
+      --bg: #0a0f1a;
+      --surface: #0f1c2e;
+      --surface2: #162436;
+      --text: #d0dce8;
+      --text-muted: #7a98b8;
+      --border: #1e3a58;
+      --header-bg: #070d18;
+      --header-text: #c8dce8;
+      --nav-hover: rgba(200, 220, 240, 0.12);
+      --card-shadow: 0 4px 24px rgba(0, 0, 0, 0.5);
+    }
+
+    /* ---------- Header ---------- */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: var(--header-bg);
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.35);
+      transition: background var(--transition), box-shadow var(--transition);
+      font-family: var(--font);
+    }
+
+    .header-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 68px;
+      gap: 16px;
+    }
+
+    .site-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: var(--header-text);
+      font-weight: 700;
+      font-size: 1.1rem;
+      white-space: nowrap;
+      text-decoration: none;
+    }
+
+    .site-brand .logo-icon {
+      width: 44px;
+      height: 44px;
+      background: var(--surface);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      color: #1a3a5c;
+    }
+
+    .site-brand .logo-icon img {
+      width: 28px;
+      height: 28px;
+      object-fit: contain;
+    }
+
+    .brand-sub {
+      font-size: 0.75rem;
+      font-weight: 400;
+      color: var(--header-text);
+      opacity: 0.75;
+    }
+
+    nav#mainNav {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .nav-link {
+      color: var(--header-text);
+      padding: 8px 16px;
+      border-radius: var(--radius-sm);
+      font-weight: 500;
+      font-size: 0.95rem;
+      transition: background var(--transition), color var(--transition);
+      white-space: nowrap;
+      text-decoration: none;
+    }
+
+    .nav-link:hover,
+    .nav-link.active {
+      background: var(--nav-hover);
+      color: var(--accent);
+    }
+
+    .header-controls {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .theme-toggle {
+      background: rgba(255, 255, 255, 0.12) !important;
+      border: 1px solid rgba(255, 255, 255, 0.2) !important;
+      color: var(--header-text) !important;
+      border-radius: 24px !important;
+      padding: 6px 14px !important;
+      cursor: pointer;
+      font-size: 0.85rem !important;
+      display: flex !important;
+      align-items: center;
+      gap: 6px;
+      transition: background var(--transition), border-color var(--transition);
+      font-family: var(--font);
+      white-space: nowrap;
+      width: auto !important;
+      height: auto !important;
+      margin: 0 !important;
+      position: static !important;
+      transform: none !important;
+      box-shadow: none !important;
+      justify-content: center !important;
+    }
+
+    /* สั่งปิด styles เก่าที่ไปทับ theme-toggle */
+    .theme-toggle::after {
+      content: none !important;
+    }
+
+    .theme-toggle i {
+      display: none !important;
+    }
+
+    .theme-toggle:hover {
+      background: rgba(255, 255, 255, 0.22) !important;
+    }
+
+    .hamburger {
+      display: none;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      padding: 6px;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .hamburger span {
+      display: block;
+      width: 24px;
+      height: 2px;
+      background: var(--header-text);
+      border-radius: 2px;
+      transition: transform var(--transition), opacity var(--transition);
+    }
+
+    .mobile-nav {
+      display: none;
+      flex-direction: column;
+      background: var(--primary);
+      padding: 8px 24px 16px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      font-family: var(--font);
+    }
+
+    .mobile-nav.open {
+      display: flex;
+    }
+
+    .mobile-nav .nav-link {
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 0;
+    }
+
+    .mobile-nav .nav-link:last-child {
+      border-bottom: none;
+    }
+
+    @media (max-width: 768px) {
+      nav#mainNav {
+        display: none;
+      }
+
+      .hamburger {
+        display: flex;
+      }
+
+      .brand-sub {
+        display: none;
+      }
+
+      .header-inner {
+        padding: 0 16px;
+      }
+    }
+
+    /* ---------- Banner ---------- */
+    .banner-wrapper-new {
+      width: 100%;
+      overflow: hidden;
+      position: relative;
+      max-height: 420px;
+      font-family: var(--font);
+    }
+
+    .banner-wrapper-new img {
+      width: 100%;
+      height: 420px;
+      object-fit: cover;
+      object-position: center;
+      display: block;
+    }
+
+    .banner-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom, rgba(26, 58, 92, 0.15) 0%, rgba(26, 58, 92, 0.55) 100%);
+      display: flex;
+      align-items: flex-end;
+      padding: 40px 48px;
+    }
+
+    body.dark-mode .banner-overlay {
+      background: linear-gradient(to bottom, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.72) 100%);
+    }
+
+    .banner-text h1 {
+      font-size: 2.4rem;
+      font-weight: 700;
+      color: #fff;
+      text-shadow: 0 2px 12px rgba(0, 0, 0, 0.5);
+      margin-bottom: 6px;
+      margin-top: 0;
+    }
+
+    .banner-text p {
+      font-size: 1.1rem;
+      color: rgba(255, 255, 255, 0.85);
+      text-shadow: 0 1px 6px rgba(0, 0, 0, 0.4);
+      margin: 0;
+    }
+
+    @media (max-width: 600px) {
+      .banner-overlay {
+        padding: 30px 20px;
+      }
+
+      .banner-text h1 {
+        font-size: 1.8rem;
+      }
+
+      .banner-text p {
+        font-size: 0.95rem;
+      }
+
+      .banner-wrapper-new img {
+        height: auto;
+        min-height: 250px;
+      }
+    }
+  </style>
+</head>
+
+<body id="top-page">
+  <!-- ── Header ── -->
+  <header>
+    <div class="header-inner">
+      <a href="index1.html" class="site-brand">
+        <div class="logo-icon"><img src="logo/logo2.png" alt="Logo"></div>
+        <div>
+          <div style="font-weight:bold; font-size:18px;">หมู่บ้านซับประดู่</div>
+          <div class="brand-sub">เว็บไซต์ทางการชุมชน</div>
+        </div>
+      </a>
+
+      <nav id="mainNav" aria-label="เมนูหลัก">
+        <a href="index1.html" class="nav-link" id="nav-home">หน้าแรก</a>
+        <a href="news.html" class="nav-link" id="nav-news">ข่าวสาร</a>
+        <a href="personnel.html" class="nav-link" id="nav-personnel">บุคลากร</a>
+        <a href="contact1.html" class="nav-link" id="nav-contact">ติดต่อ</a>
+      </nav>
+
+      <div class="header-controls">
+        <button id="themeToggle" class="theme-toggle" aria-label="เปลี่ยนธีม">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+            stroke="currentColor" style="width:16px;height:16px;">
+            <path stroke-linecap="round" stroke-linejoin="round"
+              d="M21.752 15.002A9.72 9.72 0 0 1 18 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 0 0 3 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 0 0 9.002-5.998Z" />
+          </svg> <span class="theme-text" style="color: inherit;">โหมดกลางคืน</span>
+        </button>
+        <button id="hamburger" class="hamburger" aria-label="เปิดเมนู" aria-expanded="false">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Nav -->
+    <nav id="mobileNav" class="mobile-nav" aria-label="เมนูมือถือ">
+      <a href="index1.html" class="nav-link">หน้าแรก</a>
+      <a href="news.html" class="nav-link">ข่าวสาร</a>
+      <a href="History.html" class="nav-link">ประวัติบ้านซับประดู่</a>
+      <a href="personnel.html" class="nav-link">บุคลากร</a>
+      <a href="contact.html" class="nav-link">ติดต่อ</a>
+    </nav>
+  </header>
+
+  <!-- ── Banner ── -->
+  <div class="banner-wrapper-new">
+    <img src="New folder/images/banner.png" alt="ภาพหมู่บ้านซับประดู่" loading="eager" />
+    <div class="banner-overlay">
+      <div class="banner-text">
+        <h1>ยินดีต้อนรับสู่หมู่บ้านซับประดู่</h1>
+        <p>เว็บไซต์ทางการชุมชน • ข่าวสาร ประกาศ และข้อมูลสำหรับชาวบ้าน</p>
+      </div>
+    </div>
+  </div>
+
+  <section class="project-section">
+    <div class="project-info">
+      <h2>ข่าวสาร<br />และประกาศ</h2>
+      <div class="line"></div>
+      <p>ข่าวสารและประกาศเพิ่มเติม</p>
+      <a href="news.html"><button class="view-btn">เพิ่มเติม</button></a>
+    </div>
+
+    <div class="project-slider" id="home-news-slider">
+      <p style="padding: 20px; color: #000000">กำลังโหลดภาพกิจกรรม.....</p>
+    </div>
+  </section>
+
+  <div class="bottom-line"></div>
+
+  <div class="about-section">
+    <div class="about-wrapper">
+      <div class="about-content">
+        <div class="about-text">
+          <h2>ประวัติหมู่บ้าน</h2>
+          <div class="about-desc">
+            หมู่บ้านซับประดู่ เป็นชุมชนที่มีความเข้มแข็ง ตั้งอยู่ในพื้นที่อันอุดมสมบูรณ์
+            ผู้คนในหมู่บ้านประกอบอาชีพเกษตรกรรมและหัตถกรรมพื้นบ้าน มีวิถีชีวิตที่เรียบง่ายและเอื้ออาทรต่อกัน
+            ภายใต้การบริหารของคณะกรรมการหมู่บ้าน ที่มุ่งพัฒนาชุมชนให้มีคุณภาพชีวิตที่ดีขึ้นอย่างต่อเนื่อง
+          </div>
+          <a href="History.html" class="about-btn">ประวัติ</a>
+        </div>
+      </div>
+      <div class="stats-row">
+        <div class="stat-item">
+          <i class="fa-solid fa-eye"></i>
+          <div class="stat-number" id="website-visits">0</div>
+          <div class="stat-label">ผู้เข้าชมเว็บไซต์</div>
+        </div>
+        <div class="stat-item">
+          <i class="fa-regular fa-newspaper"></i>
+          <div class="stat-number" id="news-count">0</div>
+          <div class="stat-label">ข่าวสารทั้งหมด</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="main-footer" id="contact-section">
+    <div class="footer-container">
+      <div class="footer-map">
+        <h3 class="footer-heading">
+          <i class="fa-solid fa-map-location-dot"></i> แผนที่หมู่บ้าน
+        </h3>
+        <iframe
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d5233.075800093523!2d101.14846794768505!3d14.683516114448876!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x311dd9ee87b39e8f%3A0x7786f394e1bf5a8c!2z4Lin4Lix4LiU4LiL4Lix4Lia4Lib4Lij4Liw4LiU4Li54LmI!5e1!3m2!1sth!2sth!4v1771738293559!5m2!1sth!2sth"
+          style="border: 0" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+        </iframe>
+      </div>
+
+      <div class="footer-contact">
+        <h3 class="footer-heading">
+          <i class="fa-solid fa-address-book"></i> ช่องทางการติดต่อ
+        </h3>
+        <ul class="contact-list">
+          <li>
+            <i class="fa-solid fa-location-dot"></i>หมู่บ้านซับประดู่ หมู่ที่
+            6 ตำบลมวกเหล็ก อำเภอมวกเหล็ก จังหวัดสระบุรี 18180 Suppradoo, moo6,
+            muaklek district, muaklek, saraburi 18180, Thailand
+          </li>
+          <li>
+            <i class="fa-solid fa-phone"></i> 084-353-6666 (กำนัน)
+          </li>
+          <li><i class="fa-solid fa-envelope"></i> Suppradoom6@gmail.com</li>
+        </ul>
+
+        <h3 class="footer-heading" style="margin-top: 25px">
+          <i class="fa-solid fa-share-nodes"></i>
+          ติดตามข่าวสารหรือติดต่อเราผ่านช่องทางออนไลน์ได้ที่
+        </h3>
+        <div class="social-icons">
+          <a href="https://www.facebook.com/Suppradoomuaklek" class="social-btn facebook" title="Facebook"><i
+              class="fa-brands fa-facebook-f"></i></a>
+
+          <a href="https://lin.ee/yygH47J" target="_blank" class="social-btn line" title="LINE Official"><i
+              class="fa-brands fa-line"></i></a>
+
+        </div>
+      </div>
+    </div>
+    <div class="site-footer">Copyright © ซับประดู่ | All Rights Reserved</div>
+  </footer>
+  <a href="#top-page" class="back-to-top" id="backToTop">
+    <i class="fas fa-chevron-up"></i>
+  </a>
+  <script>
+    // ============================================
+    // 1. [เพิ่มใหม่] ฟังก์ชันทำความสะอาดข้อมูล ป้องกันการฝังโค้ด XSS
+    // ============================================
+    function escapeHTML(str) {
+      if (!str) return "";
+      return str.toString().replace(/[&<>'"]/g, function (tag) {
+        const charsToReplace = {
+          '&': '&amp;',
+          '<': '&lt;',
+          '>': '&gt;',
+          "'": '&#39;',
+          '"': '&quot;'
+        };
+        return charsToReplace[tag] || tag;
+      });
+    }
+    // ============================================
+    // การตั้งค่า API (ใช้ URL จาก Apps Script)
+    // ============================================
+    const API_URL = "https://script.google.com/macros/s/AKfycbwzN3twd-y3hkRqqhP0-HOtj-181zii3YI-qktN2O9yh2IRFESVDWwlbgaMSQRxBdhfFA/exec";
+    const API_KEY = "SuppradooSecret_2024";
+
+    async function fetchHomeNews() {
+      try {
+        const response = await fetch(`${API_URL}?key=${API_KEY}`);
+        const json = await response.json();
+
+        if (!json.success) throw new Error(json.error);
+
+        const allRows = json.data;
+        const totalNews = allRows.length;
+
+        const countElement2 = document.getElementById("news-count");
+        if (countElement2) countElement2.innerText = totalNews;
+
+        const sliderRows = allRows.slice(0, 6);
+        const container = document.getElementById("home-news-slider");
+
+        if (sliderRows.length > 0) {
+          container.innerHTML = sliderRows
+            .map(
+              (n) => `
+                        <div class="project-card">
+                            <img src="${escapeHTML(n.img)}" onerror="this.src='logo/logo.png'" alt="${escapeHTML(n.title)}">
+                            <div class="card-title">${escapeHTML(n.title)}</div>
+                        </div>
+                    `
+            )
+            .join("");
+        } else {
+          container.innerHTML = '<p style="padding:20px;">ไม่พบข้อมูลข่าวสาร</p>';
+        }
+      } catch (error) {
+        console.error("Error loading news:", error);
+        document.getElementById("home-news-slider").innerHTML = "<p>โหลดข้อมูลไม่สำเร็จ</p>";
+      }
+    }
+
+    // ============================================
+    // [เพิ่มใหม่] ระบบนับจำนวนผู้เข้าชม (Auto Counter)
+    // ============================================
+    async function countVisits() {
+      try {
+        // 1. เช็คว่าคนนี้เคยเข้ามาหรือยัง?
+        // เราจะเช็คจาก "ตราประทับ" ที่เราฝากไว้ในเครื่องเขา
+        const STORAGE_KEY = "visited_subpradu_homepage";
+        const hasVisited = localStorage.getItem(STORAGE_KEY);
+
+        let response;
+
+        if (!hasVisited) {
+          // === กรณี: ยังไม่เคยเข้า ===
+          // 1. สั่งให้นับเพิ่ม (+1)
+          response = await fetch(
+            "https://api.counterapi.dev/v1/visited_subpradu_homepage/homepage/up",
+          );
+
+          // 2. ฝากตราประทับไว้ในเครื่องเขา ว่า "นับไปแล้วนะ"
+          localStorage.setItem(STORAGE_KEY, "true");
+        } else {
+          // === กรณี: เคยเข้าแล้ว (กด Refresh) ===
+          // 1. สั่งให้อ่านตัวเลขเฉยๆ (ไม่เอา /up)
+          response = await fetch(
+            "https://api.counterapi.dev/v1/visited_subpradu_homepage/homepage/",
+          );
+        }
+
+        // เอาตัวเลขมาแสดงผล
+        const data = await response.json();
+        const counterElement = document.getElementById("website-visits");
+        if (counterElement) {
+          counterElement.innerText = data.count.toLocaleString();
+        }
+      } catch (error) {
+        console.error("นับยอดวิวไม่สำเร็จ:", error);
+      }
+    }
+    // เรียกใช้งานตอนโหลดหน้าเว็บ
+    window.onload = function () {
+      if (typeof fetchHomeNews === "function") fetchHomeNews();
+      countVisits();
+    };
+
+    // ============================================
+    // ระบบ Hamburger Menu สำหรับมือถือ 
+    // ============================================
+    document.addEventListener("DOMContentLoaded", function () {
+      const hamburger = document.getElementById("hamburger");
+      const mobileNav = document.getElementById("mobileNav");
+
+      if (hamburger && mobileNav) {
+        hamburger.addEventListener("click", function () {
+          const open = mobileNav.classList.toggle("open");
+          hamburger.setAttribute("aria-expanded", String(open));
+        });
+
+        // Close when clicking outside
+        document.addEventListener('click', (e) => {
+          if (!hamburger.contains(e.target) && !mobileNav.contains(e.target)) {
+            mobileNav.classList.remove('open');
+            hamburger.setAttribute("aria-expanded", false);
+          }
+        });
+      }
+    });
+
+    // ============================================
+    // [เพิ่มใหม่] ระบบปุ่มเลื่อนกลับขึ้นบนสุด (Back to Top)
+    // ============================================
+    // ฟังก์ชันนี้จะคอยจับตาดูว่าผู้ใช้ "เลื่อนหน้าจอ (scroll)" หรือยัง
+    window.addEventListener("scroll", function () {
+      // ค้นหาปุ่ม Back to top จาก id
+      const backToTop = document.getElementById("backToTop");
+
+      // ตรวจสอบว่าหน้าจอถูกเลื่อนลงมาจากจุดบนสุดเกิน 200 พิกเซล หรือไม่
+      if (window.scrollY > 200) {
+        // ถ้าเลื่อนลงมาเกิน 200px ให้ใส่คลาส 'show' (ปุ่มจะค่อยๆ ปรากฏขึ้นมาตาม CSS)
+        backToTop.classList.add("show");
+      } else {
+        // ถ้าเลื่อนกลับไปบนสุด (ยังไม่เกิน 200px) ให้เอาคลาส 'show' ออก (ปุ่มจะหายไป)
+        backToTop.classList.remove("show");
+      }
+    });
+
+    // ============================================
+    // ระบบ Dark Mode (กดสลับโหมด และจดจำค่าไว้)
+    // ============================================
+    document.addEventListener("DOMContentLoaded", () => {
+      const themeToggleBtn = document.getElementById("themeToggle");
+      const body = document.body;
+      const themeText = themeToggleBtn ? themeToggleBtn.querySelector(".theme-text") : null;
+      const moonSvg = '<path stroke-linecap="round" stroke-linejoin="round" d="M21.752 15.002A9.72 9.72 0 0 1 18 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 0 0 3 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 0 0 9.002-5.998Z" />';
+      const sunSvg = '<path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2.25m6.364.386-1.591 1.591M21 12h-2.25m-.386 6.364-1.591-1.591M12 18.75V21m-4.773-4.227-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0Z" />';
+      const svgGraphic = themeToggleBtn ? themeToggleBtn.querySelector("svg") : null;
+
+      function updateThemeBtn(isDark) {
+        if (!themeText || !svgGraphic) return;
+        if (isDark) {
+          themeText.innerText = "โหมดกลางวัน";
+          svgGraphic.innerHTML = sunSvg;
+        } else {
+          themeText.innerText = "โหมดกลางคืน";
+          svgGraphic.innerHTML = moonSvg;
+        }
+      }
+
+      // 1. ตรวจสอบตอนเปิดเว็บว่าเคยเปิดโหมดมืดไว้ไหม?
+      if (localStorage.getItem("theme") === "dark") {
+        body.classList.add("dark-mode");
+        updateThemeBtn(true);
+      } else {
+        updateThemeBtn(false);
+      }
+
+      // 2. สั่งงานเมื่อคลิกปุ่ม
+      if (themeToggleBtn) {
+        themeToggleBtn.addEventListener("click", () => {
+          // สลับคลาสโหมดมืด
+          body.classList.toggle("dark-mode");
+          const isDark = body.classList.contains("dark-mode");
+
+          if (isDark) {
+            localStorage.setItem("theme", "dark");
+            updateThemeBtn(true);
+          } else {
+            localStorage.setItem("theme", "light");
+            updateThemeBtn(false);
+          }
+        });
+      }
+    });
+
+    // ============================================
+    // [เพิ่มใหม่] ระบบ Smooth Scroll แบบซ่อน # ใน URL
+    // ============================================
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        const targetId = this.getAttribute('href');
+
+        // ข้ามการทำงานนี้ ถ้าเป็นลิงก์ # เฉยๆ หรือลิงก์กลับขึ้นบนสุดที่เรามีโค้ดแยกไว้แล้ว
+        if (targetId === '#' || targetId === '#top-page') return;
+
+        const targetElement = document.querySelector(targetId);
+
+        if (targetElement) {
+          e.preventDefault(); // สั่งยกเลิกพฤติกรรมปกติ (เพื่อไม่ให้ URL เปลี่ยนเป็น #)
+
+          // 1. คำนวณระยะเลื่อน โดยหักระยะเผื่อความสูงของแถบเมนูด้านบน (ประมาณ 100px)
+          const headerOffset = 100;
+          const elementPosition = targetElement.getBoundingClientRect().top;
+          const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+          // 2. สั่งให้หน้าจอเลื่อนลงมาอย่างนุ่มนวล
+          window.scrollTo({
+            top: offsetPosition,
+            behavior: "smooth"
+          });
+
+          // 3. (สำหรับมือถือ) ถ้าเปิดเมนูอยู่ ให้หุบเมนูเก็บอัตโนมัติ
+          const mobileNav = document.getElementById("mobileNav");
+          const hamburger = document.getElementById("hamburger");
+          if (mobileNav && mobileNav.classList.contains("open")) {
+            mobileNav.classList.remove("open");
+            if (hamburger) hamburger.setAttribute("aria-expanded", false);
+          }
+        }
+      });
+    });
+  </script>
+</body>
+
+</html>
