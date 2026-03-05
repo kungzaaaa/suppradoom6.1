@@ -1201,6 +1201,9 @@
       background: rgba(255, 255, 255, 0.22) !important;
     }
 
+    /* ========================================= */
+    /* [ปรับปรุง] ระบบแอนิเมชันปุ่ม 3 ขีด (Hamburger) */
+    /* ========================================= */
     .hamburger {
       display: none;
       background: transparent;
@@ -1217,30 +1220,96 @@
       height: 2px;
       background: var(--header-text);
       border-radius: 2px;
-      transition: transform var(--transition), opacity var(--transition);
+      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
     }
 
+    /* เมื่อเปิดเมนู ให้ 3 ขีดแปลงร่างเป็นกากบาท (X) อย่างนุ่มนวล */
+    .hamburger[aria-expanded="true"] span:nth-child(1) {
+      transform: translateY(7px) rotate(45deg);
+    }
+
+    .hamburger[aria-expanded="true"] span:nth-child(2) {
+      opacity: 0;
+    }
+
+    .hamburger[aria-expanded="true"] span:nth-child(3) {
+      transform: translateY(-7px) rotate(-45deg);
+    }
+
+    /* ========================================= */
+    /* [ปรับปรุง] ระบบสไลด์เมนูมือถือ (Smooth Slide) */
+    /* ========================================= */
     .mobile-nav {
       display: none;
+      /* ซ่อนบนหน้าจอคอมพิวเตอร์ */
       flex-direction: column;
       background: var(--primary);
-      padding: 8px 24px 16px;
-      border-top: 1px solid rgba(255, 255, 255, 0.1);
       font-family: var(--font);
-    }
-
-    .mobile-nav.open {
-      display: flex;
     }
 
     .mobile-nav .nav-link {
       padding: 10px 0;
       border-bottom: 1px solid rgba(255, 255, 255, 0.08);
       border-radius: 0;
+      opacity: 0;
+      transform: translateX(-20px);
+      /* ให้ข้อความซ่อนไปทางซ้ายก่อน */
+      transition: all 0.3s ease;
     }
 
     .mobile-nav .nav-link:last-child {
       border-bottom: none;
+    }
+
+    /* เฉพาะบนมือถือ ให้เปิดระบบสไลด์ */
+    @media (max-width: 768px) {
+      .mobile-nav {
+        display: flex;
+        max-height: 0;
+        opacity: 0;
+        visibility: hidden;
+        overflow: hidden;
+        padding: 0 24px;
+        border-top: none;
+        transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+        /* ควบคุมความสมูทการดึงลง */
+      }
+
+      /* เมื่อกดเปิดเมนู */
+      .mobile-nav.open {
+        max-height: 400px;
+        /* ยืดกล่องลงมา */
+        opacity: 1;
+        visibility: visible;
+        padding: 8px 24px 16px;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      /* แอนิเมชันให้ข้อความลิงก์สไลด์เข้ามาทีละบรรทัด */
+      .mobile-nav.open .nav-link {
+        opacity: 1;
+        transform: translateX(0);
+      }
+
+      .mobile-nav.open .nav-link:nth-child(1) {
+        transition-delay: 0.1s;
+      }
+
+      .mobile-nav.open .nav-link:nth-child(2) {
+        transition-delay: 0.15s;
+      }
+
+      .mobile-nav.open .nav-link:nth-child(3) {
+        transition-delay: 0.2s;
+      }
+
+      .mobile-nav.open .nav-link:nth-child(4) {
+        transition-delay: 0.25s;
+      }
+
+      .mobile-nav.open .nav-link:nth-child(5) {
+        transition-delay: 0.3s;
+      }
     }
 
     @media (max-width: 768px) {
