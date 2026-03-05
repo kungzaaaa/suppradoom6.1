@@ -1,0 +1,1194 @@
+﻿<!doctype html>
+<html lang="th">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ข่าวสารหมู่บ้าน</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&family=Noto+Sans+Thai:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+  <link rel="icon" type="image/x-icon" sizes="16x16" href="logo/logotitle.png" />
+  <style>
+    :root {
+      --primary: #1a3a5c;
+      --accent: #c8a951;
+      --bg: #f0f4f8;
+      --white: #ffffff;
+      --shadow: 0 10px 30px rgba(26, 58, 92, 0.08);
+    }
+
+    body {
+      font-family: 'Sarabun', 'Noto Sans Thai';
+      margin: 0;
+      background-color: var(--bg);
+      color: #444;
+      overflow-x: hidden;
+    }
+
+    /* --- 1. แถบข่าวด่วนแบบ Gradient --- */
+    .ticker-wrap {
+      background: whitesmoke;
+      color: #000000;
+      padding: 14px 0;
+      overflow: hidden;
+      white-space: nowrap;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .ticker-move {
+      display: inline-block;
+      animation: ticker-animation 50s linear infinite;
+    }
+
+    .ticker-item {
+      display: inline-block;
+      padding: 0 60px;
+      font-size: 14px;
+      letter-spacing: 0.5px;
+    }
+
+    .ticker-item b {
+      color: rgb(0, 0, 0);
+      margin-right: 8px;
+    }
+
+    @keyframes ticker-animation {
+      0% {
+        transform: translateX(100%);
+      }
+
+      100% {
+        transform: translateX(-100%);
+      }
+    }
+
+    /* --- 2. Header พร้อมลูกเล่น Overlay --- */
+    /* --- 2. Header สไตล์ Modern Clean (เรียบหรู เตะตา) --- */
+    header {
+      background: linear-gradient(135deg, var(--white) 0%, #e8edf4 100%);
+      color: var(--primary);
+      /* ใช้สีตัวหนังสือเข้มให้อ่านง่าย */
+      padding: 80px 20px 100px 20px;
+      /* เพิ่มพื้นที่ด้านล่างให้มีที่ว่าง */
+      text-align: center;
+      position: relative;
+      border-bottom: none;
+      /* เอาขอบหนาๆ ทิ้งไป */
+      overflow: hidden;
+    }
+
+    /* ตกแต่งตัวหนังสือหัวข้อให้โดดเด่น */
+    header h1 {
+      font-size: 42px;
+      font-weight: 700;
+      margin: 0;
+      letter-spacing: -0.5px;
+      text-shadow: none;
+      /* เอาเงาดำๆ ออกให้คลีนขึ้น */
+      position: relative;
+      z-index: 2;
+    }
+
+    /* ไอคอนหน้าหัวข้อให้ดูมีราคาขึ้น */
+    header h1 i {
+      color: var(--accent);
+      margin-right: 10px;
+      font-size: 38px;
+      vertical-align: middle;
+    }
+
+    /* ตกแต่งคำอธิบายย่อย */
+    header p {
+      font-size: 18px;
+      color: #666;
+      margin-top: 15px;
+      font-weight: 400;
+      position: relative;
+      z-index: 2;
+    }
+
+    /* ลูกเล่นวงกลมเบลอเป็นพื้นหลังจางๆ (Abstract Shape) */
+    header::before {
+      content: "";
+      position: absolute;
+      top: -50px;
+      right: -50px;
+      width: 250px;
+      height: 250px;
+      background: rgba(26, 58, 92, 0.08);
+      border-radius: 50%;
+      filter: blur(40px);
+      z-index: 1;
+    }
+
+    /* --- 3. การจัดเลย์เอาท์ Container --- */
+    .container {
+      max-width: 1200px;
+      margin: -50px auto 80px;
+      /* ยก Container ขึ้นซ้อน Header เล็กน้อย */
+      display: grid;
+      grid-template-columns: 1.8fr 1fr;
+      gap: 40px;
+      padding: 0 20px;
+    }
+
+    /* --- 4. การตกแต่ง News Card (ลูกเล่นเด้งและเงาเรืองแสง) --- */
+    .news-item {
+      background: var(--white);
+      border-radius: 20px;
+      overflow: hidden;
+      display: grid;
+      grid-template-columns: 320px 1fr;
+      margin-bottom: 30px;
+      box-shadow: var(--shadow);
+      transition: all 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
+      text-decoration: none;
+      color: inherit;
+      opacity: 0;
+      transform: translateY(40px);
+      border: 1px solid rgba(26, 58, 92, 0.1);
+    }
+
+    .news-item.active {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .news-item:hover {
+      transform: translateY(-12px) scale(1.01);
+      box-shadow: 0 20px 40px rgba(26, 58, 92, 0.15);
+      border-left: 8px solid var(--accent);
+    }
+
+    .news-thumb {
+      width: 100%;
+      height: 100%;
+      min-height: 240px;
+      overflow: hidden;
+    }
+
+    .news-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: 1s;
+    }
+
+    .news-item:hover .news-thumb img {
+      transform: scale(1.15) rotate(2deg);
+    }
+
+    .news-content {
+      padding: 30px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .news-title {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--primary);
+      margin: 0 0 15px;
+      line-height: 1.5;
+    }
+
+    .news-desc {
+      font-size: 15px;
+      color: #666;
+      line-height: 1.8;
+      margin-bottom: 20px;
+    }
+
+    .news-meta {
+      font-size: 13px;
+      color: #999;
+      display: flex;
+      gap: 25px;
+      padding-top: 15px;
+      border-top: 1px solid #f0f0f0;
+    }
+
+    .news-meta i {
+      color: var(--accent);
+      margin-right: 5px;
+    }
+
+    /* --- 5. Sidebar แบบ Glassmorphism --- */
+    .sidebar-box {
+      background: rgba(255, 255, 255, 0.8);
+      backdrop-filter: blur(10px);
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: var(--shadow);
+      margin-bottom: 30px;
+      border: 1px solid rgba(255, 255, 255, 0.5);
+    }
+
+    .sidebar-title {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 25px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .sidebar-title::after {
+      content: "";
+      flex: 1;
+      height: 2px;
+      background: var(--accent);
+      opacity: 0.3;
+    }
+
+    .hot-link {
+      display: flex;
+      align-items: center;
+      padding: 12px 0;
+      text-decoration: none;
+      color: #555;
+      transition: 0.3s;
+      border-bottom: 1px dashed #eee;
+    }
+
+    .hot-link:hover {
+      color: var(--accent);
+      padding-left: 10px;
+    }
+
+    .hot-link i {
+      font-size: 8px;
+      margin-right: 12px;
+      color: var(--accent);
+    }
+
+    /* --- 6. Floating Buttons --- */
+    .float-back {
+      position: fixed;
+      bottom: 30px;
+      left: 30px;
+      background: var(--primary);
+      color: var(--white);
+      padding: 10px 24px;
+      border-radius: 50px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+      font-size: 15px;
+      font-weight: 600;
+      box-shadow: 0 4px 12px rgba(26, 58, 92, 0.2);
+      z-index: 1000;
+      transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+
+    .float-back:hover {
+      background: var(--accent);
+      transform: translateX(-8px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    @media (max-width: 768px) {
+      .float-back {
+        bottom: 20px;
+        left: 20px;
+        padding: 8px 18px;
+        font-size: 14px;
+      }
+    }
+
+    /* --- แก้ไขจุดนี้ในส่วน CSS --- */
+    .container {
+      max-width: 1200px;
+      margin: 40px auto 80px;
+      /* <--- เปลี่ยนจากค่าลบ (เช่น -50px) เป็นค่าบวก 40px */
+      display: grid;
+      grid-template-columns: 1.8fr 1fr;
+      gap: 40px;
+      padding: 0 20px;
+      position: relative;
+      z-index: 10;
+    }
+
+    /* ========================================= */
+    /* ส่วนเสริมสำหรับมือถือ (Mobile Responsive) */
+    /* ========================================= */
+    @media (max-width: 900px) {
+
+      /* 1. จัดโครงสร้างหลักใหม่ (เอา Sidebar ไปไว้ล่างสุด) */
+      .container {
+        grid-template-columns: 1fr;
+        /* คอลัมน์เดียว */
+        margin-top: 20px;
+      }
+
+      /* 2. ปรับการ์ดข่าวให้รูปอยู่บน ข้อความอยู่ล่าง */
+      .news-item {
+        grid-template-columns: 1fr;
+        /* ยกเลิกการแบ่งซ้ายขวา */
+        border-radius: 15px;
+      }
+
+      .news-thumb {
+        height: 200px;
+        /* กำหนดความสูงรูปให้พอดี */
+      }
+
+      .news-thumb img {
+        width: 100%;
+        height: 100%;
+      }
+
+      .news-content {
+        padding: 20px;
+      }
+
+      /* 3. ปรับ Header ให้ตัวหนังสือไม่ใหญ่เกิน */
+      header {
+        padding: 60px 20px;
+      }
+
+      header h1 {
+        font-size: 28px;
+      }
+
+      /* 4. ปรับ Sidebar (แถบข้าง) */
+      aside {
+        order: 2;
+        /* สั่งให้ไปอยู่ต่อท้ายเนื้อหาข่าว */
+      }
+    }
+
+    /* ========================================= */
+    /* [เพิ่มใหม่] สไตล์ปุ่ม "เพิ่มเติม" และ "ย่อ" */
+    /* ========================================= */
+    .action-btn {
+      background-color: var(--primary);
+      /* สีน้ำตาลของธีม */
+      color: var(--white);
+      border: none;
+      padding: 10px 28px;
+      /* ขนาดพอดีกับตัวอักษร */
+      font-size: 16px;
+      font-family: 'Sarabun', 'Noto Sans Thai';
+      font-weight: 600;
+      border-radius: 50px;
+      /* โค้งมนเป็นรูปแคปซูล */
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      /* ระยะห่างไอคอนกับข้อความ */
+      box-shadow: 0 4px 15px rgba(26, 58, 92, 0.2);
+      transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+
+    .action-btn:hover {
+      background-color: var(--accent);
+      /* ชี้แล้วเปลี่ยนเป็นสีดำ */
+      transform: translateY(-3px);
+      /* ลอยขึ้นเบาๆ */
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    /* ========================================= */
+    /* ตกแต่งปุ่มลอย Dark Mode มุมขวาล่าง */
+    /* ========================================= */
+    .float-theme {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      width: 45px;
+      height: 45px;
+      background: var(--white);
+      color: var(--primary);
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 18px;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      z-index: 1000;
+      transition: all 0.3s ease;
+      border: 1px solid rgba(0, 0, 0, 0.05);
+    }
+
+    .float-theme:hover {
+      transform: scale(1.1);
+    }
+
+    @media (max-width: 768px) {
+      .float-theme {
+        bottom: 20px;
+        right: 20px;
+        width: 40px;
+        height: 40px;
+        font-size: 16px;
+      }
+    }
+
+    /* ========================================= */
+    /* สีโหมดมืดสำหรับหน้า News */
+    /* ========================================= */
+    body.dark-mode {
+      background-color: #0a0f1a !important;
+    }
+
+    body.dark-mode header {
+      background: #070d18 !important;
+    }
+
+    body.dark-mode header h1,
+    body.dark-mode header p,
+    body.dark-mode .news-title,
+    body.dark-mode .sidebar-title {
+      color: #d0dce8 !important;
+    }
+
+    /* เปลี่ยนสีการ์ดข่าวและเมนูข้างๆ */
+    body.dark-mode .news-item,
+    body.dark-mode .sidebar-box {
+      background-color: #0f1c2e !important;
+      border-color: #1e3a58 !important;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5) !important;
+    }
+
+    body.dark-mode .news-desc,
+    body.dark-mode .hot-link {
+      color: #7a98b8 !important;
+    }
+
+    /* เปลี่ยนสีแถบข่าวด่วนด้านบนสุด */
+    body.dark-mode .ticker-wrap {
+      background: #070d18 !important;
+      color: #d0dce8 !important;
+      border-bottom: 1px solid #1e3a58 !important;
+    }
+
+    body.dark-mode .ticker-item b {
+      color: var(--accent) !important;
+    }
+
+    /* สีปุ่มลอยเมื่อเป็นโหมดมืด */
+    body.dark-mode .float-theme {
+      background: #0f1c2e !important;
+      color: var(--accent) !important;
+      border: 1px solid #1e3a58 !important;
+    }
+
+    /* ========================================= */
+    /* [แก้ไข] สี Sidebar Box และ ปุ่มต่างๆ ในหน้าข่าว (Dark Mode) */
+    /* ========================================= */
+
+    /* 1. บังคับลบสี Gradient เดิมที่ฝังอยู่ใน HTML */
+    body.dark-mode .sidebar-box {
+      background: #0f1c2e !important;
+      /* ใช้ background เฉยๆ เพื่อเคลียร์ gradient */
+      border: 1px solid #1e3a58 !important;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5) !important;
+    }
+
+    /* เปลี่ยนสีตัวหนังสือใน Sidebar */
+    body.dark-mode .sidebar-box h3,
+    body.dark-mode .sidebar-box p {
+      color: #d0dce8 !important;
+    }
+
+    /* 2. ตกแต่งปุ่มเพิ่มเพื่อน LINE ในโหมดมืด */
+    body.dark-mode .sidebar-box a[href*="lin.ee"] {
+      background: #162436 !important;
+      /* พื้นหลังสีเทาเข้ม */
+      color: #06c755 !important;
+      /* ตัวหนังสือสีเขียว LINE */
+      border: 1px solid #06c755 !important;
+      /* กรอบสีเขียว */
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5) !important;
+    }
+
+    body.dark-mode .sidebar-box a[href*="lin.ee"]:hover {
+      background: #06c755 !important;
+      color: #ffffff !important;
+    }
+
+    /* 3. ตกแต่งปุ่ม "เพิ่มเติม" / "ย่อ" ด้านล่างข่าว */
+    body.dark-mode .action-btn {
+      background-color: #162436 !important;
+      color: var(--accent) !important;
+      border: 1px solid var(--accent) !important;
+    }
+
+    body.dark-mode .action-btn:hover {
+      background-color: var(--accent) !important;
+      color: #0a0f1a !important;
+    }
+
+    /* ========================================= */
+    /* [แก้ไขเพิ่ม] ตกแต่ง Hot List (ข่าวเด่น) ในโหมดมืด */
+    /* ========================================= */
+
+    /* 1. เปลี่ยนสีตัวหนังสือและเส้นประแบ่งบรรทัด */
+    body.dark-mode .hot-link {
+      color: #cccccc !important;
+      /* สีตัวหนังสือให้อ่านง่ายขึ้น */
+      border-bottom: 1px dashed #444444 !important;
+      /* สีเส้นประให้กลืนกับโหมดมืด ไม่สว่างโดด */
+    }
+
+    /* 2. เปลี่ยนสีจุดวงกลมด้านหน้าให้เป็นสีส้มสว่าง */
+    body.dark-mode .hot-link i {
+      color: var(--accent) !important;
+    }
+
+    /* 3. เอฟเฟกต์เวลาเอาเมาส์ชี้ (Hover) ให้สว่างขึ้น */
+    body.dark-mode .hot-link:hover {
+      color: #ffffff !important;
+      border-bottom-color: var(--accent) !important;
+    }
+
+    /* ========================================= */
+    /* [แก้ไขเพิ่ม] เปลี่ยนสีไอคอนเฉพาะจุดในโหมดมืด */
+    /* ========================================= */
+
+    body.dark-mode .fa-calendar-check,
+    body.dark-mode .fa-eye,
+    body.dark-mode .fa-newspaper {
+      color: var(--accent) !important;
+      opacity: 0.9;
+    }
+
+    /* ถ้าต้องการให้ไอคอนในกล่องรายละเอียดข่าว (เช่น วันที่) สว่างเป็นพิเศษ */
+    body.dark-mode .news-meta,
+    body.dark-mode .news-meta span {
+      color: #ffffff !important;
+      /* เปลี่ยนตัวหนังสือเป็นสีขาวสว่าง */
+    }
+
+    /* สไตล์ช่องค้นหาและปุ่มหมวดหมู่ */
+    /* ========================================= */
+    .filter-container {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      margin-bottom: 30px;
+      background: var(--white);
+      padding: 20px;
+      border-radius: 20px;
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(181, 138, 33, 0.1);
+    }
+
+    .search-box {
+      position: relative;
+      width: 100%;
+    }
+
+    .search-box input {
+      width: 100%;
+      padding: 12px 20px 12px 45px;
+      border: 2px solid #f0f0f0;
+      border-radius: 50px;
+      font-family: 'Sarabun', 'Noto Sans Thai';
+      font-size: 15px;
+      box-sizing: border-box;
+      outline: none;
+      transition: all 0.3s;
+      background: #fafafa;
+    }
+
+    .search-box input:focus {
+      border-color: var(--accent);
+      background: var(--white);
+      box-shadow: 0 0 15px rgba(26, 58, 92, 0.1);
+    }
+
+    .search-box i {
+      position: absolute;
+      left: 18px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #999;
+    }
+
+    .category-buttons {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .cat-btn {
+      background: #f8f8f8;
+      color: var(--primary);
+      border: 1px solid #eee;
+      padding: 8px 20px;
+      border-radius: 50px;
+      cursor: pointer;
+      font-family: 'Sarabun', 'Noto Sans Thai';
+      font-size: 14px;
+      transition: 0.3s;
+    }
+
+    .cat-btn:hover {
+      background: rgba(26, 58, 92, 0.1);
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .cat-btn.active {
+      background: var(--primary);
+      color: var(--white);
+      border-color: var(--primary);
+    }
+
+    .news-category-badge {
+      display: inline-block;
+      background: rgba(26, 58, 92, 0.15);
+      color: var(--accent);
+      padding: 4px 12px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+
+    /* สำหรับ Dark Mode */
+    body.dark-mode .filter-container {
+      background: #0f1c2e;
+      border-color: #1e3a58;
+    }
+
+    body.dark-mode .search-box input {
+      background: #162436;
+      border-color: #1e3a58;
+      color: #fff;
+    }
+
+    body.dark-mode .cat-btn {
+      background: #162436;
+      border-color: #1e3a58;
+      color: #d0dce8;
+    }
+
+    body.dark-mode .cat-btn.active {
+      background: var(--accent);
+      color: #0a0f1a;
+      border-color: var(--accent);
+    }
+
+    body.dark-mode .news-category-badge {
+      background: rgba(200, 169, 81, 0.2);
+      color: var(--accent);
+    }
+
+    /* ========================================= */
+    /* สไตล์ปุ่มแชร์ข่าว */
+    /* ========================================= */
+    .share-btn {
+      background: none;
+      border: none;
+      color: var(--accent);
+      font-family: 'Sarabun', 'Noto Sans Thai';
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      border-radius: 50px;
+      transition: all 0.3s;
+    }
+
+    .share-btn:hover {
+      background: rgba(200, 169, 81, 0.1);
+      transform: translateY(-2px);
+    }
+
+    .news-meta-wrapper {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+    }
+
+    body.dark-mode .share-btn {
+      color: var(--accent);
+    }
+
+    body.dark-mode .share-btn:hover {
+      background: rgba(200, 169, 81, 0.15);
+    }
+
+    /* ========================================= */
+    /* [แก้ไขเพิ่ม] สีปุ่มกลับ (Float Back) ในโหมดมืด */
+    /* ========================================= */
+    body.dark-mode .float-back {
+      background-color: #2a2a2a !important;
+      color: var(--accent) !important;
+      border: 1px solid var(--accent) !important;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5) !important;
+    }
+
+    /* เอฟเฟกต์เวลาเอาเมาส์ชี้ปุ่มกลับในโหมดมืด */
+    body.dark-mode .float-back:hover {
+      background-color: var(--accent) !important;
+      color: #121212 !important;
+      transform: translateX(-8px) !important;
+    }
+
+    /* 1. สั่งให้เนื้อหาย่อเหลือ 3 บรรทัด (และมี ... ต่อท้าย) */
+    .news-desc {
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      /* จำนวนบรรทัดที่ต้องการโชว์ */
+      line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* 2. สไตล์สำหรับกล่อง Modal (หน้าต่างป๊อปอัพข่าวเต็ม) */
+    .news-modal {
+      display: none;
+      position: fixed;
+      z-index: 2000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(5px);
+    }
+
+    .modal-content {
+      background-color: var(--white);
+      margin: 5% auto;
+      padding: 0;
+      border-radius: 20px;
+      width: 90%;
+      max-width: 800px;
+      max-height: 85vh;
+      overflow-y: auto;
+      position: relative;
+      animation: modalFadeIn 0.3s ease;
+    }
+
+    @keyframes modalFadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .close-modal {
+      position: sticky;
+      top: 15px;
+      right: 20px;
+      float: right;
+      font-size: 30px;
+      font-weight: bold;
+      cursor: pointer;
+      color: #999;
+      z-index: 10;
+    }
+
+    .modal-body {
+      padding: 30px;
+    }
+
+    .modal-body img {
+      width: 100%;
+      border-radius: 15px;
+      margin-bottom: 20px;
+    }
+
+    .modal-body h2 {
+      color: var(--primary);
+      margin-bottom: 15px;
+    }
+
+    .modal-body p {
+      line-height: 1.8;
+      color: #444;
+      white-space: pre-line;
+    }
+
+    /* ปรับจูนในโหมดมืด */
+    body.dark-mode .modal-content {
+      background-color: #1e1e1e;
+      color: #fff;
+    }
+
+    body.dark-mode .modal-body p {
+      color: #ccc;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="ticker-wrap">
+    <div class="ticker-move" id="ticker-box">
+      <span class="ticker-item"><b>ข่าวด่วน:</b>
+        กำลังรวบรวมข่าวสารล่าสุดจากหมู่บ้านซับประดู่...</span>
+    </div>
+  </div>
+
+  <header>
+    <h1><i class="fa-solid fa-earth-asia"></i> ข่าวสารหมู่บ้านซับประดู่</h1>
+  </header>
+
+  <div class="container">
+    <main>
+      <div class="filter-container">
+        <div class="search-box">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input type="text" id="searchInput" placeholder="ค้นหาหัวข้อ หรือรายละเอียดข่าว..."
+            onkeyup="searchNews(this.value)">
+        </div>
+        <div class="category-buttons" id="category-buttons">
+        </div>
+      </div>
+
+      <div id="news-container">
+        <div style="text-align: center; padding: 100px">
+          <i class="fa-solid fa-circle-notch fa-spin fa-3x" style="color: var(--accent)"></i>
+          <p style="margin-top: 20px; color: var(--accent)">กำลังเปิดอ่านฐานข้อมูล...</p>
+        </div>
+      </div>
+    </main>
+
+    <aside>
+      <div class="sidebar-box">
+        <div class="sidebar-title">
+          <i class="fa-solid fa-fire"></i> ข่าวสารวันนี้
+        </div>
+        <div id="hot-list"></div>
+      </div>
+
+      <div class="sidebar-box" style="
+            background: linear-gradient(135deg, var(--primary), #7a5648);
+            color: white;
+          ">
+        <h3 style="margin-top: 0">
+          <i class="fa-brands fa-line"></i> ติดต่อหมู่บ้าน
+        </h3>
+        <p style="font-size: 14px; opacity: 0.9">
+          แจ้งเรื่องร้องเรียนหรือสอบถามข้อมูลเพิ่มเติมผ่าน LINE Official
+        </p>
+        <a href="https://lin.ee/yygH47J" target="_blank" style="
+              background: #06c755;
+              color: white;
+              padding: 12px 25px;
+              border-radius: 30px;
+              text-decoration: none;
+              display: inline-block;
+              margin-top: 10px;
+              font-weight: 600;
+              box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            ">
+          เพิ่มเพื่อน LINE
+        </a>
+      </div>
+    </aside>
+  </div>
+
+  <a href="index1.html" class="float-back"><i class="fa-solid fa-arrow-left"></i> กลับ</a>
+
+  <div class="float-theme" id="themeToggle" title="สลับโหมดหน้าจอ">
+    <i class="fa-solid fa-moon"></i>
+  </div>
+
+  <div id="newsModal" class="news-modal">
+    <div class="modal-content">
+      <span class="close-modal" onclick="closeNewsModal()">&times;</span>
+      <div id="modalData" class="modal-body">
+      </div>
+    </div>
+  </div>
+
+  <script>
+
+    function escapeHTML(str) {
+      if (str === null || str === undefined) return "";
+      return String(str).replace(/[&<>'"]/g, function (tag) {
+        const charsToReplace = {
+          '&': '&amp;',
+          '<': '&lt;',
+          '>': '&gt;',
+          "'": '&#39;',
+          '"': '&quot;'
+        };
+        return charsToReplace[tag] || tag;
+      });
+    }
+
+    // ============================================
+    // [เพิ่มใหม่] ฟังก์ชันแปลงวันที่และตัดเวลาทิ้ง
+    // ============================================
+    function formatThaiDate(dateString) {
+      if (!dateString) return "ไม่ระบุวันที่";
+
+      // ตัดข้อความเวลาภาษาอังกฤษทิ้ง
+      let cleanDate = dateString.toString().replace(/00:00:00 GMT\+0700 \(Indochina Time\)/gi, "").trim();
+
+      // แปลงเป็นวันที่แบบไทย (เช่น 15 ตุลาคม 2566)
+      let d = new Date(cleanDate);
+      if (!isNaN(d.getTime())) {
+        return d.toLocaleDateString('th-TH', {
+          day: 'numeric',
+          month: 'long',
+          year: 'numeric'
+        });
+      }
+      return cleanDate; // ถ้าแปลงไม่ได้ ให้โชว์ข้อความที่ตัดเวลาทิ้งแล้ว
+    }
+
+    // ============================================
+    // การตั้งค่า API (ใช้ URL จาก Apps Script)
+    // ============================================
+    const API_URL = "https://script.google.com/macros/s/AKfycbwzN3twd-y3hkRqqhP0-HOtj-181zii3YI-qktN2O9yh2IRFESVDWwlbgaMSQRxBdhfFA/exec";
+    const API_KEY = "SuppradooSecret_2024"; // ใช้ API Key เดียวกับ URL เพื่อความปลอดภัยขั้นพื้นฐาน
+
+    // ตัวแปรเก็บสถานะการค้นหาและหมวดหมู่
+    let allNewsData = [];
+    let isExpanded = false;
+    let currentCategory = "ทั้งหมด";
+    let searchQuery = "";
+    let allCategories = [];
+
+    async function getNews() {
+      try {
+        const response = await fetch(`${API_URL}?key=${API_KEY}`);
+        const json = await response.json();
+
+        if (!json.success) throw new Error(json.error);
+
+        render(json.data);
+      } catch (e) {
+        console.error("Error fetching news:", e);
+        document.getElementById("news-container").innerHTML =
+          "<p style='text-align:center; padding:50px;'>ไม่สามารถโหลดข้อมูลได้ในขณะนี้</p>";
+      }
+    }
+
+    function render(data) {
+      allNewsData = data;
+
+      // ดึงหมวดหมู่ที่ไม่ซ้ำกันออกมาสร้างปุ่ม
+      const uniqueCats = new Set(data.map(n => n.category ? String(n.category) : "").filter(c => c.trim() !== ""));
+      allCategories = ["ทั้งหมด", ...Array.from(uniqueCats)];
+
+      // สร้างปุ่มหมวดหมู่
+      renderCategoryButtons();
+
+      // อัปเดต Sidebar ข่าวด่วน และ ข่าวเด่น
+      const ticker = document.getElementById("ticker-box");
+      const hot = document.getElementById("hot-list");
+
+      ticker.innerHTML = data.map(n => `<span class="ticker-item"><b>ข่าวล่าสุด:</b> ${escapeHTML(n.title)}</span>`).join("");
+      hot.innerHTML = [...data].reverse().slice(0, 5).map(n => `<a href="javascript:void(0)" class="hot-link" onclick="openNewsModal(${allNewsData.indexOf(n)})"><i class="fa-solid fa-circle"></i> ${escapeHTML(n.title)}</a>`).join("");
+
+      // เรียกฟังก์ชันแสดงผลข่าวหลัก
+      updateNewsDisplay();
+    }
+
+    // [เพิ่มใหม่] ฟังก์ชันสร้างปุ่มหมวดหมู่
+    function renderCategoryButtons() {
+      const catContainer = document.getElementById("category-buttons");
+      if (!catContainer) return;
+      catContainer.innerHTML = allCategories.map(cat => `
+            <button class="cat-btn ${cat === currentCategory ? 'active' : ''}" onclick="setCategory('${cat}')">${cat}</button>
+        `).join('');
+    }
+
+    // [เพิ่มใหม่] เมื่อกดเลือกหมวดหมู่
+    function setCategory(cat) {
+      currentCategory = cat;
+      isExpanded = false; // รีเซ็ตให้กลับไปแสดง 6 ข่าว
+      renderCategoryButtons(); // อัปเดตสีปุ่ม
+      updateNewsDisplay(); // อัปเดตข่าว
+    }
+
+    // [เพิ่มใหม่] เมื่อพิมพ์ค้นหา
+    function searchNews(text) {
+      searchQuery = text.toLowerCase();
+      isExpanded = false;
+      updateNewsDisplay();
+    }
+
+    // ฟังก์ชันแสดงข่าว (เพิ่มระบบคัดกรองข้อมูลก่อนแสดงผล)
+    function updateNewsDisplay() {
+      const list = document.getElementById("news-container");
+
+      // 1. กรองข้อมูลตามหมวดหมู่และคำค้นหา
+      let filteredData = allNewsData.filter(n => {
+        const catStr = n.category ? String(n.category) : "";
+        const titleStr = n.title ? String(n.title).toLowerCase() : "";
+        const descStr = n.desc ? String(n.desc).toLowerCase() : "";
+
+        const matchCategory = (currentCategory === "ทั้งหมด") || (catStr === currentCategory);
+        const matchSearch = titleStr.includes(searchQuery) || descStr.includes(searchQuery);
+        return matchCategory && matchSearch;
+      });
+
+      // 2. กำหนดว่าจะโชว์กี่ข่าว (6 อัน หรือ ทั้งหมด)
+      const itemsToShow = isExpanded ? filteredData : filteredData.slice(0, 6);
+
+      // ถ้าค้นหาแล้วไม่เจอข่าวเลย
+      if (filteredData.length === 0) {
+        list.innerHTML = `<div style="text-align: center; padding: 60px 20px; color: #888;">
+                <i class="fa-solid fa-box-open fa-3x" style="margin-bottom: 15px; opacity: 0.5;"></i>
+                <p>ไม่พบข่าวสารที่คุณค้นหา</p>
+            </div>`;
+        return;
+      }
+
+      // 3. สร้าง HTML ของข่าว (เพิ่ม tag แสดงหมวดหมู่ และ ปุ่มแชร์)
+      let html = itemsToShow.map(n => `
+        <div class="news-item" onclick="openNewsModal(${allNewsData.indexOf(n)})" style="cursor:pointer">
+            <div class="news-thumb"><img src="${escapeHTML(n.img)}" onerror="this.src='logo/logo.png'"></div>
+            <div class="news-content">
+                <div>
+                    <span class="news-category-badge">${escapeHTML(n.category)}</span>
+                    <h3 class="news-title">${escapeHTML(n.title)}</h3>
+                    <p class="news-desc">${escapeHTML(n.desc)}</p>
+                </div>
+                <div class="news-meta">
+                    <div class="news-meta-wrapper">
+                        <span><i class="fa-regular fa-calendar-check"></i> ${escapeHTML(formatThaiDate(n.date))}</span>
+                        <button onclick="event.stopPropagation(); shareNews('${encodeURIComponent(n.title)}')" class="share-btn" title="แชร์ข่าวนี้">
+                            <i class="fa-solid fa-share-nodes"></i> แชร์
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>`).join("");
+
+      // 4. ปุ่ม เพิ่มเติม/ย่อ
+      if (filteredData.length > 6) {
+        html += `<div style="text-align: center; margin-top: 40px; padding-bottom: 20px;">`;
+        if (!isExpanded) {
+          html += `<button onclick="toggleNews()" class="action-btn"><i class="fa-solid fa-angle-down"></i> เพิ่มเติม</button>`;
+        } else {
+          html += `<button onclick="toggleNews()" class="action-btn"><i class="fa-solid fa-angle-up"></i> ย่อ</button>`;
+        }
+        html += `</div>`;
+      }
+
+      list.innerHTML = html;
+
+      // 5. ใส่ Effect Animation
+      const obs = new IntersectionObserver((ents) => {
+        ents.forEach((ent) => {
+          if (ent.isIntersecting) ent.target.classList.add("active");
+        });
+      }, { threshold: 0.1 });
+      document.querySelectorAll(".news-item").forEach((i) => obs.observe(i));
+    }
+
+    // [เพิ่มใหม่] ฟังก์ชันสำหรับแชร์ข่าว
+    function shareNews(encodedTitle) {
+      const title = decodeURIComponent(encodedTitle);
+      const url = window.location.href;
+
+      if (navigator.share) {
+        navigator.share({
+          title: 'ข่าวหมู่บ้านซับประดู่',
+          text: `อ่านข่าว "${title}" ได้ที่เว็บไซต์หมู่บ้านซับประดู่: `,
+          url: url
+        }).catch((error) => console.log('ผู้ใช้ยกเลิกการแชร์ หรือเกิดข้อผิดพลาด:', error));
+      } else {
+        navigator.clipboard.writeText(url).then(() => {
+          alert(`คัดลอกลิงก์สำหรับหน้าข่าวเรียบร้อยแล้วครับ!\n(ข่าว: ${title})\n\nคุณสามารถนำลิงก์ไปวางในแอปอื่นเพื่อแชร์ได้เลย`);
+        }).catch(err => {
+          alert('ไม่สามารถคัดลอกลิงก์ได้ กรุณาก๊อปปี้ลิงก์ที่ช่อง URL ด้านบนแทนครับ');
+        });
+      }
+    }
+
+    function toggleNews() {
+      isExpanded = !isExpanded;
+      updateNewsDisplay();
+
+      if (!isExpanded) {
+        const container = document.querySelector(".filter-container");
+        const y = container.getBoundingClientRect().top + window.scrollY - 100;
+        window.scrollTo({ top: y, behavior: "smooth" });
+      }
+    }
+
+    window.onload = getNews;
+
+    // ============================================
+    // ระบบ Dark Mode (กดสลับโหมด และจดจำค่าไว้)
+    // ============================================
+    document.addEventListener("DOMContentLoaded", () => {
+      const themeToggleBtn = document.getElementById("themeToggle");
+      const body = document.body;
+      const icon = themeToggleBtn ? themeToggleBtn.querySelector("i") : null;
+
+      if (localStorage.getItem("theme") === "dark") {
+        body.classList.add("dark-mode");
+        if (icon) icon.classList.replace("fa-moon", "fa-sun");
+      }
+
+      if (themeToggleBtn) {
+        themeToggleBtn.addEventListener("click", () => {
+          body.classList.toggle("dark-mode");
+          if (body.classList.contains("dark-mode")) {
+            localStorage.setItem("theme", "dark");
+            if (icon) icon.classList.replace("fa-moon", "fa-sun");
+          } else {
+            localStorage.setItem("theme", "light");
+            if (icon) icon.classList.replace("fa-sun", "fa-moon");
+          }
+        });
+      }
+    });
+
+    // ฟังก์ชันเปิดดูรายละเอียดข่าวเต็ม
+    function openNewsModal(index) {
+      const news = allNewsData[index];
+      const modal = document.getElementById("newsModal");
+      const modalData = document.getElementById("modalData");
+
+      modalData.innerHTML = `
+        <img src="${escapeHTML(news.img)}" onerror="this.src='logo/logo.png'">
+        <span class="news-category-badge">${escapeHTML(news.category)}</span>
+        <h2>${escapeHTML(news.title)}</h2>
+        <p><i class="fa-regular fa-calendar-check"></i> ${escapeHTML(formatThaiDate(news.date))}</p>
+        <hr style="opacity:0.1; margin:20px 0;">
+        <p>${escapeHTML(news.desc)}</p>
+      `;
+
+      modal.style.display = "block";
+      document.body.style.overflow = "hidden"; // ปิดการเลื่อนหน้าจอด้านหลัง
+    }
+
+    // ฟังก์ชันปิดหน้าต่าง
+    function closeNewsModal() {
+      document.getElementById("newsModal").style.display = "none";
+      document.body.style.overflow = "auto"; // เปิดการเลื่อนหน้าจอปกติ
+    }
+
+    // ปิดหน้าต่างเมื่อคลิกพื้นที่ด้านนอก
+    window.onclick = function (event) {
+      const modal = document.getElementById("newsModal");
+      if (event.target == modal) closeNewsModal();
+    }
+  </script>
+</body>
+
+</html>
